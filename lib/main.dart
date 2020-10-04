@@ -36,9 +36,10 @@ _initScanbotSdk() async {
 
   var config = ScanbotSdkConfig(
       licenseKey: BARCODE_SDK_LICENSE_KEY,
-      loggingEnabled: true, // Consider disabling logging in production builds for security and performance reasons.
-      storageBaseDirectory: "${storageDirectory.path}/custom-barcode-sdk-storage"
-  );
+      loggingEnabled:
+          true, // Consider disabling logging in production builds for security and performance reasons.
+      storageBaseDirectory:
+          "${storageDirectory.path}/custom-barcode-sdk-storage");
 
   try {
     await ScanbotBarcodeSdk.initScanbotSdk(config);
@@ -132,7 +133,9 @@ class _MainPageState extends State<MainPageWidget> {
   }
 
   startBarcodeScanner({bool shouldSnapImage = false}) async {
-    if (!await checkLicenseStatus(context)) { return; }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
     var config = BarcodeScannerConfiguration(
       barcodeImageGenerationType: shouldSnapImage
@@ -141,7 +144,8 @@ class _MainPageState extends State<MainPageWidget> {
       topBarBackgroundColor: Colors.blueAccent,
       finderLineColor: Colors.red,
       cancelButtonTitle: "Cancel",
-      finderTextHint: "Please align any supported barcode in the frame to scan it.",
+      finderTextHint:
+          "Please align any supported barcode in the frame to scan it.",
       successBeepEnabled: true,
       barcodeFormats: barcodeFormatsRepository.selectedFormats.toList(),
       // see further customization configs ...
@@ -163,10 +167,15 @@ class _MainPageState extends State<MainPageWidget> {
 
   pickImageAndDetect() async {
     try {
-      var image = await ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: 90);
-      if (image == null) { return; }
+      var image = await ImagePicker.pickImage(
+          source: ImageSource.gallery, imageQuality: 90);
+      if (image == null) {
+        return;
+      }
 
-      if (!await checkLicenseStatus(context)) { return; }
+      if (!await checkLicenseStatus(context)) {
+        return;
+      }
 
       var result = await ScanbotBarcodeSdk.detectFromImageFile(
           image.uri, barcodeFormatsRepository.selectedFormats.toList(), true);
@@ -185,7 +194,8 @@ class _MainPageState extends State<MainPageWidget> {
   cleanupStorage() async {
     try {
       await ScanbotBarcodeSdk.cleanupBarcodeStorage();
-      showAlertDialog(context, "Barcode image storage was cleaned", title: "Info");
+      showAlertDialog(context, "Barcode image storage was cleaned",
+          title: "Info");
     } catch (e) {
       print(e);
     }
@@ -205,7 +215,9 @@ class _MainPageState extends State<MainPageWidget> {
     if (result.isLicenseValid) {
       return true;
     }
-    await showAlertDialog(context, 'Scanbot SDK trial period or (trial) license has expired.', title: 'Info');
+    await showAlertDialog(
+        context, 'Scanbot SDK trial period or (trial) license has expired.',
+        title: 'Info');
     return false;
   }
 }
